@@ -1,6 +1,5 @@
 # DevSecOps Git Misconfiguration — Single-File CTF
 
-
 Your company set up a CI/CD pipeline for its DevSecOps workflow.  
 Due to a **Git misconfiguration**, a secret was mistakenly uploaded and later stuffed into a pipeline artifact.  
 Your mission: **extract the secret and find the hidden flag**.
@@ -8,6 +7,7 @@ Your mission: **extract the secret and find the hidden flag**.
 ---
 
 ## Files You’ll Receive
+
 - `devsecops.zip` — the outer archive that contains everything you need
   - Inside it you’ll find:
     - `launch.sh` — a helper script that reveals a password
@@ -23,6 +23,3 @@ chmod +x launch.sh
 unzip -P <password_from_launch.sh> protected.zip
 
 get the flag --------------------------->   inm{You'rectfchampion}
-
-
-

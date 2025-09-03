@@ -13,6 +13,7 @@ I started with the most basic filter: *http*.
 Applying the http filter immediately narrowed down the packets to just web traffic.
 
 ![alt text](image.png)
+
 Scrolling through the list, I noticed a pattern: many GET requests were being made for various .txt files.
 
 This seemed highly suspicious and was likely where the flag was hidden.
