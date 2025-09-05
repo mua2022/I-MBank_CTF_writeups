@@ -1,6 +1,6 @@
 # InvisiTech — Asset API CTF: Step‑by‑step writeup
 
-**Starter**
+    *Starter*
 
 > Another piece of InvisiTech Lab's internal tooling has surfaced.
 >
