@@ -39,17 +39,17 @@ The command returned a single result:
 
     ./resources.arsc: binary file matches
 
-This output was highly significant. 
+This output was highly significant.
 
-It indicated that the searched pattern was present within the resources.arsc binary file but could not be displayed as text by grep. 
+It indicated that the searched pattern was present within the resources.arsc binary file but could not be displayed as text by grep.
 
 This pinpointed the resources.arsc file as the primary location of interest for the hidden flag.
 
 ## 3: Deep Dive into Binary Resources
 
-The resources.arsc file is a compiled binary, requiring specialized tools to extract human-readable data. 
+The resources.arsc file is a compiled binary, requiring specialized tools to extract human-readable data.
 
-The strings utility was employed, which scans a binary file and extracts all contiguous sequences of printable characters. 
+The strings utility was employed, which scans a binary file and extracts all contiguous sequences of printable characters.
 
 This output was then piped into grep to filter for the specific pattern.
 
@@ -63,7 +63,7 @@ The command successfully extracted two relevant strings from the binary:
 
     flag{static_analysis_basics}
 
-The first string, hidden_flag, was determined to be a decoy—a common tactic in CTF challenges to mislead participants. 
+The first string, hidden_flag, was determined to be a decoy—a common tactic in CTF challenges to mislead participants.
 
 The second string, flag{static_analysis_basics}, was the correctly formatted flag and the solution to the challenge.
 
