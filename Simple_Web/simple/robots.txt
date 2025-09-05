@@ -1,0 +1,3 @@
+User-agent: *<br><br>
+Disallow: /hidden_flag.txt<br><br>
+Disallow: /secret/admin.html<br><br>
