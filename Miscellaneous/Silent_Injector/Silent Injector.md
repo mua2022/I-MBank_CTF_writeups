@@ -94,7 +94,7 @@ The duckdecoder.py script was developed early using Python2 hence not compatible
 4. Scanning through the decoded output the flag is visible towards the end of the script.
 
     ```bash
-    STRING echo This is the secret CTF flag: **flag{inm_Secure_Online_Banking}**> secret.txt
+    STRING echo This is the secret CTF flag: flag{inm_Secure_Online_Banking} > secret.txt
     ```
 
 ## Method 2: Using DuckToolkit
