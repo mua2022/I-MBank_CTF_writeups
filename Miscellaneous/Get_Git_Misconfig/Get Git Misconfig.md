@@ -24,7 +24,8 @@ Your mission: **extract the secret and find the hidden flag**.
 
   ```unzip -P <password_from_launch.sh> protected.zip```
 
-> get the flag --------------------------->   inm{You'rectfchampion}
+> get the flag --------------------------->   **inm{You'rectfchampion}**
+
 
 
 
