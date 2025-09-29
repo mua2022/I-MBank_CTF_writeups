@@ -13,7 +13,7 @@ This challenge reminded us to **actually read the rules** before diving into the
 
 4. Right-click → **View Page Source**.
 
-   _Viewing pae source:_
+   _Viewing page source:_
 
    <img width="1880" height="202" alt="image" src="https://github.com/user-attachments/assets/8ce665f9-7eae-4515-9561-6b244132f432" />
 
