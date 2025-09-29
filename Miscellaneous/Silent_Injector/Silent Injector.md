@@ -20,12 +20,13 @@ The duckdecoder.py script was developed early using Python2 hence not compatible
 
 1. Ensure you have the script and the payload in the same directory to make the process straightforward.
 
-![alt text](image.png)
+   ![alt text](image.png)
 
 2. Run the duckdecoder.py script against the silent.bin file using Python 2.
 
     ```bash
     python2 DuckDecoder.py decode silent.bin
+    ```
 
 3. The script will output the decoded Ducky Script commands to the terminal. Analyze the output.
 
@@ -90,10 +91,11 @@ The duckdecoder.py script was developed early using Python2 hence not compatible
     STRING exit
     ENTER
 
-4. Scanning through the decoded output the flag the flag is visible towards the end of the script.
+4. Scanning through the decoded output the flag is visible towards the end of the script.
 
     ```bash
-    STRING echo This is the secret CTF flag: flag{inm_Secure_Online_Banking}> secret.txt
+    STRING echo This is the secret CTF flag: **flag{inm_Secure_Online_Banking}**> secret.txt
+    ```
 
 ## Method 2: Using DuckToolkit
 
@@ -109,12 +111,13 @@ Another great simple method to approach this challenge was to use DuckToolkit to
 
 1. Ensure you have the script and the payload in the same directory to make the process straightforward.
 
-![alt text](image-1.png)
+   ![alt text](image-1.png)
 
 2. Run the ducktools.py script against the silent.bin file and output the results to a .txt file for analysis later.
 
     ```bash
     ducktools.py -d -l gb silent.bin silent.txt
+    ```
 
 3. Use simple cat command or any text editor to view contents of the file output.
 
