@@ -1,4 +1,4 @@
-# Android Static Analysis
+# Android App Reversing
 
 ## 1: APK Extraction & Structure Reconnaissance
 
