@@ -11,7 +11,7 @@ Your mission: **extract the secret and find the hidden flag**.
 - `devsecops.zip` — the outer archive that contains everything you need
   - Inside it you’ll find:
     - `launch.sh` — a helper script that reveals a password
-    - `protected.zip` — an inner, password-protected archive containing a CI config with a misconfiguration
+    - `protected.zip` — an inner, password-protected archive containing a misconfigured CI config.
 
       ![alt text](image.png)
 
@@ -25,5 +25,6 @@ Your mission: **extract the secret and find the hidden flag**.
   ```unzip -P <password_from_launch.sh> protected.zip```
 
 > get the flag --------------------------->   inm{You'rectfchampion}
+
 
 
