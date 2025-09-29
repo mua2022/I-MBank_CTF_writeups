@@ -1,6 +1,7 @@
 # The Mysterious 8 digit vault
 
 ## Description
+
 Welcome, Agent! You've stumbled upon a mysterious 8-digit vault that guards a secret flag. The system expects an 8-digit key, but there's more to it than meets the eye.
 
     If you enter the wrong key, it will silently reject you.
@@ -110,6 +111,7 @@ Since the challenge demands an 8-digit key, you must pad 5256 to 8 digits with l
 Final Answer
 
 Flag: flag{00005256}
+
 Why This Works
 
     The code validates the integer value 5256, not the string length. However, to meet the "8-digit" requirement, you pad the key to 00005256.

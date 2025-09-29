@@ -61,9 +61,9 @@ I concatenated all the Base64 strings and decoded them:
     ![alt text](image-3.png)
 
 The initial decode showed some corruption, so I manually reconstructed the proper Base64 string:
-    ![alt text](image-4.png)
+    ![alt text](2025.png)
 
-Boom !!! our flag *flag{dNs_tunN3l1ng_1s_a_c0mm0n_exf1l_m3th0t}*
+Boom !!! our flag *flag{dNs_tunN3l1ng_1s_a_c0mm0n_exf1l_m3th0d}*
 
 ## How the Hint Helped Solve the Challenge
 
@@ -80,6 +80,7 @@ This hint directly guided my approach by:
     Emphasizing that proper ordering was essential for reconstruction
 
 Without this hint, I might have spent more time analyzing the legitimate DNS traffic rather than focusing immediately on the sequential exfil.badactor.com queries.
+
 ## Exfiltration Technique Analysis
 
 The attacker used DNS tunneling, a common data exfiltration technique where:
