@@ -105,7 +105,7 @@ highlighted file above and view the corresponding http metadata.
 
 > Here is the full URL (i.e, flag): `http://18.159.50.167:8111/plugins/5z6p8KCA/5z6p8KCA.jsp`
 
-## Q7. **The attacker created another user named 41m67llo and uploaded another web shell. What is the name of the ZIP file that was uploaded?
+## Q7. The attacker created another user named 41m67llo and uploaded another web shell. What is the name of the ZIP file that was uploaded?
 
 Since we are already given the username, we can just go ahead and filter
 for POST requests related to the plugin uploads.
@@ -134,3 +134,4 @@ Encoded section and expand that.
 ![alt text](image17.png)
 
 > Here is the text (i.e., flag): `YOU ARE HACKED BUDD!` _Note that both uppercase and lowercase is valid_
+
