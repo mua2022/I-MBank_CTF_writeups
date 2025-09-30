@@ -32,7 +32,7 @@ I decided to test the most common steganography technique for this kind of chall
 
 I copied the text and wrote down the first letter of each line:
 
-    F****
+    Find the ... -> F
 
     Life is... -> L
 
