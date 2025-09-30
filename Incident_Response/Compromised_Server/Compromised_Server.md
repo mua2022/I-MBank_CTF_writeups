@@ -1,12 +1,13 @@
 # Compromised server writeup
 
-    Note: This writeup contains additional questions which were not included in the challenge for context
+> **NOTE:** This writeup contains additional questions which were not included in the challenge for context
 
 ## Q1. What is the IP address of the attacker?
 
 First things first, we have to get the attacker's IP order to know how
-the flow of the traffic. Under statistics click on
-conversations[]
+the flow of the traffic. 
+
+Under statistics click on conversations
 
 ![alt text](image1.png)
 
@@ -61,6 +62,8 @@ CVSS base score of 9.8 (Critical).
 
 Reading more on this reveals the CVE as **CVE-2024-27198**
 
+> This is the flag `CVE-2024-27198`
+
 More information is available [*Message from Rapid7
 Chat*](https://www.rapid7.com/blog/post/2024/03/04/etr-cve-2024-27198-and-cve-2024-27199-jetbrains-teamcity-multiple-authentication-bypass-vulnerabilities-fixed/)
 
@@ -78,14 +81,16 @@ by the name "ahup1rui" with a password of "pXgdGJacOZ"
 
 ![alt text](image10.png)
 
-## Q5. The attacker used the newly created user to upload a web shell. What endpoint was used to upload the web shell?**
+## Q5. The attacker used the newly created user to upload a web shell. What endpoint was used to upload the web shell?
 
 Still on the POST requests, we need to find the endpoint used for
 uploading plugins to the service.
 
 ![alt text](image11.png)
 
-## Q6. The attacker uploaded a web shell using the newly created user.What is the full URL of the uploaded web shell?**
+> This is the endpoint (i.e., flag): `pluginUpload.html`
+
+## Q6. The attacker uploaded a web shell using the newly created user.What is the full URL of the uploaded web shell?
 
 To get this, we'll need to explore the network stream related to the
 previous question. Upon following the stream, we came across this file
@@ -98,7 +103,9 @@ highlighted file above and view the corresponding http metadata.
 
 ![alt text](image13.png)
 
-## Q7. **The attacker created another user named 41m67llo and uploaded another web shell. What is the name of the ZIP file that was uploaded?**
+> Here is the full URL (i.e, flag): `http://18.159.50.167:8111/plugins/5z6p8KCA/5z6p8KCA.jsp`
+
+## Q7. **The attacker created another user named 41m67llo and uploaded another web shell. What is the name of the ZIP file that was uploaded?
 
 Since we are already given the username, we can just go ahead and filter
 for POST requests related to the plugin uploads.
@@ -114,6 +121,8 @@ Scroll down to find the zip file uploaded as shown
 
 ![alt text](image16.png)
 
+> Here is the zip file uploaded (i.e, flag): `V5HwJgS3.zip`
+
 ## Q8. The attacker created a file on the system containing some text.What is the text inside that file?
 
 To get the contents of the file we need to explore the remaining network
@@ -123,3 +132,5 @@ On the same packet from the previous question, view the HTML form URL
 Encoded section and expand that.
 
 ![alt text](image17.png)
+
+> Here is the text (i.e., flag): `YOU ARE HACKED BUDD!` _Note that both uppercase and lowercase is valid_
