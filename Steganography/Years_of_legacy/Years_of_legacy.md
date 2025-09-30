@@ -86,5 +86,5 @@ When you run the script with the ciphertext and the key 51, it prints out the de
 
     flag{inm_fifty_one_years_of_legacy_to_date}
 
-## Alternative Method
-The decription can be achieved using this tool https://gchq.github.io/CyberChef/ 
+## Alternative Decryption Method
+The decryption can be achieved using this tool https://gchq.github.io/CyberChef/ 
