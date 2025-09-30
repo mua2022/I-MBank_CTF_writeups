@@ -13,7 +13,7 @@ Your mission: **extract the secret and find the hidden flag**.
     - `launch.sh` — a helper script that reveals a password
     - `protected.zip` — an inner, password-protected archive containing a CI config with a misconfiguration
 
-![alt text](image.png)
+      ![alt text](image.png)
 
 > You only need a terminal with `unzip` and permission to execute shell scripts.
 
@@ -23,6 +23,7 @@ chmod +x launch.sh
 unzip -P <password_from_launch.sh> protected.zip
 
 get the flag --------------------------->   inm{You'rectfchampion}
+
 
 
 
