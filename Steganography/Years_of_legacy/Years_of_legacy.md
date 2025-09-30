@@ -2,7 +2,7 @@
 
 ## 1 Examine the File
 
-The challenge is a steganography/cryptography warm-up called "Years Of Legacy Work" involving a JPEG image. The description talks about the year 2024 being a 50th anniversary and now being 2025. The first step is to look for hidden data in the image file.
+The challenge is a steganography/cryptography warm-up called "Years Of Legacy Work" involving a JPEG image. The description talks about the year 2024 being a 50th anniversary for I&M Bank and now being 2025. The first step is to look for hidden data in the image file.
 
 The best tool for this is exiftool, which reads metadata. Running the command *exiftool years-of-legacy.jpg* gives a lot of output,
 
@@ -13,7 +13,7 @@ Two lines are most important:
     Warning                         : Invalid EXIF text encoding for UserComment
     User Comment                    : U_RTHZ]^lUZUGJl\]VlJVRA@l\Ul_VTRPJlG\lWRGVN
 
-The warning tells us the UserComment data isn't normal text. The garbled string is our target. This is what we need to decrypt.
+The warning tells us the User Comment data isn't normal text. The garbled string is our target. This is what we need to decrypt.
 
 ## 2. Figure Out the Encryption
 
@@ -42,8 +42,8 @@ The key is 51.
 XOR decryption is simple: you take each character of the ciphertext, XOR it with the key, and convert the result back to a character.
 
 This Python script does exactly that:
-    '''bash
-
+    
+    ```bash
     def xor_decrypt(ciphertext, key):
         decrypted = []
         for char in ciphertext:
@@ -74,6 +74,7 @@ This Python script does exactly that:
 
     if __name__ == "__main__":
     main()
+    ```
 
 ## 5. Run the Script and Get the Flag
 
@@ -84,3 +85,6 @@ When you run the script with the ciphertext and the key 51, it prints out the de
 ## FLAG
 
     flag{inm_fifty_one_years_of_legacy_to_date}
+
+## Alternative Method
+The decription can be achieved using this tool https://gchq.github.io/CyberChef/ 
