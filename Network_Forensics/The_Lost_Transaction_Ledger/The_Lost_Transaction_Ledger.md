@@ -13,36 +13,58 @@ For this challenge, I used tshark, the command-line version of Wireshark. Tshark
 You could also use Wireshark for a more visual, point-and-click analysis, but I preferred tshark here for efficiency and flexibility.
 
 I started by examining the protocol hierarchy to understand the distribution of traffic and identify which protocols were worth focusing on. This step helped narrow down the scope before digging deeper into the packets.
-    *tshark -r wireshark_challenge_easy.pcap -qz io,phs*
-    ![alt text](image-1.png)
+   
+```bash
+tshark -r wireshark_challenge_easy.pcap -qz io,phs
+```
+
+![alt text](image-1.png)
 
 This told me everything is UDP data packets - no fancy protocols to worry about. Just raw data payloads waiting to be examined.
 
-🧩 First Attempt: Extracting Raw Data
+🧩 **First Attempt: Extracting Raw Data**
 
 I started by dumping all the UDP payload data:
-    *tshark -r wireshark_challenge_easy.pcap -Y "udp" -T fields -e data.data*
-    ![alt text](image-2.png)
+   
+```bash
+tshark -r wireshark_challenge_easy.pcap -Y "udp" -T fields -e data.data
+```
+
+![alt text](image-2.png)
 
 The output was a series of hex strings - not very readable. So I converted them to ASCII:
-    *tshark -r wireshark_challenge_easy.pcap -Y "udp" -T fields -e data.data | xxd -r -p*
-    ![alt text](image-3.png)
+
+```bash
+tshark -r wireshark_challenge_easy.pcap -Y "udp" -T fields -e data.data | xxd -r -p
+```
+
+![alt text](image-3.png)
 
 A mess! The flag was clearly fragmented and mixed with all this random_noise_data_XX_XX garbage.
-Cleaning Up the Noise
+
+**Cleaning Up the Noise**
 
 I tried to filter out the noise patterns:
-    *tshark -r wireshark_challenge_easy.pcap -Y "udp" -T fields -e data.data | xxd -r -p | strings | sed 's/random_noise_data_[0-9]\+_[0-9]\+//g'*
-    ![alt text](image-4.png)
+
+```bash
+tshark -r wireshark_challenge_easy.pcap -Y "udp" -T fields -e data.data | xxd -r -p | strings | sed 's/random_noise_data_[0-9]\+_[0-9]\+//g'
+```
+
+![alt text](image-4.png)
 
 
-Remembering the hint about "order of events," I realized I needed to sort the packets by time:
-    *tshark -r wireshark_challenge_easy.pcap -Y "udp" -T fields -e frame.time_epoch -e data.data | sort -n | cut -f2 | xxd -r -p | strings | sed 's/random_noise_data_[0-9]\+_[0-9]\+//g'*
-    ![alt text](image-5.png)
+Remembering the phrase **the order of events with time** from the challenge's description, I realized I needed to sort the packets by time:
+
+```bash
+tshark -r wireshark_challenge_easy.pcap -Y "udp" -T fields -e frame.time_epoch -e data.data | sort -n | cut -f2 | xxd -r -p | strings | sed 's/random_noise_data_[0-9]\+_[0-9]\+//g'
+```
+
+![alt text](image-5.png)
 
 🎉 There it was! The complete, perfectly assembled flag!
+
 🏁 The Flag
 
-flag{w3lc0m3_t0_1mbank_w1r3shark}
+> flag{w3lc0m3_t0_1mbank_w1r3shark}
 
 Translation: "Welcome to IMBank Wireshark" - a perfect welcome message for a Wireshark challenge!
