@@ -44,19 +44,19 @@ I copied this text and decoded it using an online tool : CyberChef
 ![flaggy3](image-1.png)
 
 The decoded message read:
-"well am not "onyouside""
+"well i am not "onyourside""
 
 This was a classic CTF rabbit hole! It wasn't the flag, but it was actually a brilliant hint.
 
-It was taunting me, saying the real secret wasn't in flaggy.txt but was instead in a file called onyouside.txt.
+It was taunting me, saying the real secret wasn't in flaggy.txt but was instead in a file called `onyourside.txt`.
 
 ## Finding the Real Flag
 
-With the hint, I went back to my filtered HTTP view in Wireshark and found the packet for the GET request to onyourside.txt.
+With the hint, I went back to my filtered HTTP view in Wireshark and found the packet for the GET request to `onyourside.txt`.
 
-I right-clicked on this packet and again selected Follow -> HTTP Stream.
+I right-clicked on this packet and again selected _Follow -> HTTP Stream_.
 
-In the HTTP stream window, I saw the content of the onyourside.txt file. Just like the previous file, it contained a block of Base64 encoded data.
+In the HTTP stream window, I saw the content of the `onyourside.txt` file. Just like the previous file, it contained a block of Base64 encoded data.
 
 ![onyour side](image-3.png)
 
@@ -64,6 +64,6 @@ I carefully copied this encoded string and proceeded to decode it, just as I had
 
 The decoding revealed the final, complete flag:
 
-    inm{iandm_we_are_on_your_side}
+> inm{iandm_we_are_on_your_side}
 
 ![onyourside](image-4.png)
