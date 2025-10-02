@@ -130,18 +130,16 @@ Now the response gives us a different prompt:
 > This time the API asks us to access restricted records at `/api/users/supervisor`. Definitely this looks like the flag. Let's gooo!
 
 But sending a POST to `/api/users/supervisor` returns `401 Unauthorized`. The response tells us exactly what it needs: the `X-API-KEY` header. (Remember this challenge was tagged `http-headers`.) A good hacker might try sending `X-API-KEY` with no value or with guessed/gibberish values to see how the API responds — and here that skill pays off. The API rejects our guessed `X-API-KEY` but returns a message telling us where to find the real key.
+<img width="777" height="117" alt="image" src="https://github.com/user-attachments/assets/2ccd961a-4a53-48ce-82a8-5f870784bcb2" />
 
-<img width="1137" height="150" alt="image" src="https://github.com/user-attachments/assets/48e6b376-5725-4a4f-9eda-74eaacd234aa" />
 
-It clearly instructs us to check the pipeline notes — which sends us back to the Invisitech-Labs GitHub org. In the pipeline notes (in this repo — you had to do another recon to identify which repo to check: [revamped-pipeline](https://github.com/InvisiTech-Labs/revamped-pipeline/blob/36be6e40a4de3e62fbc28ea82701c37b88ec5cd2/notes/notes.md) it was straightforward to map things: the new developer "makaveli" introduced a wave of improvements, so `revamped-pipeline` is the likely place to look rather than the older `onboarding-pipelin` repo.
+It clearly instructs us to check the pipeline notes — which sends us back to the Invisitech-Labs GitHub org. In the pipeline notes (in this Github organization — you had to do another recon to identify which repo to check: [revamped-pipeline](https://github.com/InvisiTech-Labs/revamped-pipeline/blob/36be6e40a4de3e62fbc28ea82701c37b88ec5cd2/notes/notes.md) it was straightforward to map things: the new developer "makaveli" introduced a wave of improvements, so `revamped-pipeline` is the likely place to look rather than the older `onboarding-pipeline` repo)
 
-The notes inside the `revamped-pipeline` repo do not contain the key directly. Maybe copy the hex present there and pass it as our `X-API-KEY`? Let's send that hex value `[hex her]`.
+The notes inside the `revamped-pipeline` repo do not contain the key directly. Maybe copy the hex present there and pass it as our `X-API-KEY`? Let's send that hex value, which is `68747470733a2f2f676973742e6769746875622e636f6d2f617363697465616d2f3231373035356266356362333837346236396663626533653139626439396635`.
 
 On the first submission the API seems not to accept it — it looks like it didn't even receive it. Resending once still yields nothing. On the third attempt we get a different error message. Woah — the challenge designer really led us on.
 
-
-
-<img width="777" height="117" alt="image" src="https://github.com/user-attachments/assets/2ccd961a-4a53-48ce-82a8-5f870784bcb2" />
+<img width="1137" height="150" alt="image" src="https://github.com/user-attachments/assets/48e6b376-5725-4a4f-9eda-74eaacd234aa" />
 
 Now the HTTP status code is one of a kind: `418`. What is `418` (I'm a teapot)? If this is your first time, read about it here: [HTTP Status Code 418](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/418).
 
@@ -149,19 +147,22 @@ The error gives more details: it tells us to check the formatting of the value w
 
 <img width="1137" height="150" alt="image" src="https://github.com/user-attachments/assets/b137313d-1d26-49bd-8a76-e93dae6e56f7" />
 
-> CyberChef returns (even using the Magic operation) a gist link: {gist link her}}.
+> CyberChef returns (even using the Magic operation) a gist link: [https://gist.github.com/asciteam/217055bf5cb3874b69fcbe3e19bd99f5](https://gist.github.com/asciteam/217055bf5cb3874b69fcbe3e19bd99f5).
 >
 > The gist is tantalizing — it contains the `X-API-KEY` we have been searching for. Take the key and feed it to the POST request for `/api/users/supervisor`.
 
 <img width="1709" height="872" alt="image" src="https://github.com/user-attachments/assets/0c13b179-33ea-4226-8257-ff84ee3457fb" />
 
-> Using the value from the gist: `{value here}` successfully returns the long-sought flag:
+> Using the value from the gist: `inm-ctf-x-api-key-FwGorJZzdfC3QKgv4rKmw1zHCN7HSpSJOcKBjV1ceAhGbG3Sc4SbuLWpuo2l2XfPCRefjAo8q7QA2m` successfully returns the long-sought flag:
 
 <img width="1381" height="623" alt="image" src="https://github.com/user-attachments/assets/b870110c-840a-4b64-9f0a-e7f3398ed269" />
 
+---
+
 **NOTE:** The above steps are the expected flow of access through the API to get the flag. Although many paths can be reached through fuzzing, fuzzing may hit endpoints but miss the breadcrumbs that help you construct the sequence of requests expected by the API until you reach the final endpoint. An alternative approach is to rely more heavily on fuzzing; that can also work and is briefly discussed below.
 
-
+---
+## Alternative method to solve - Using tools
 ### Option A — `ffuf` (fast and suited for path fuzzing)
 
 ```bash
@@ -188,7 +189,7 @@ ffuf -u http://127.0.0.1:5000/api/FUZZ -w ~/wordlists/api_endpoints.txt -mc 200,
 
 ---
 
-## Narrowing down with targeted checks
+#### Narrowing down with targeted checks
 
 - Once a candidate endpoint is found (e.g. `/api/users`), test common subpaths by hand and watch for different responses or hints
 - Note that the /api/{any-non-existent-path} results to a verbose 404
@@ -218,7 +219,7 @@ This tells you two things:
 
 ---
 
-## Hunting for the key (breadcrumbs)
+#### Hunting for the key (breadcrumbs)
 
 Developers sometimes leave pointers in code or configuration. 
 
@@ -228,7 +229,7 @@ In this challenge we found a hex blob that decodes to a URL (a GitHub Gist) poin
 
 * ![alt text](image.png)
 
-### Decode the key from HEX
+#### Decode the key from HEX
 
 * ![alt text](image-1.png)
 
@@ -236,7 +237,7 @@ The decoded string produced a URL like `https://gist.github.com/asciteam/217055b
 
 * ![alt text](image-2.png)
 
-## Using the discovered API key
+#### Using the discovered API key
 
 Once you have the key (format: `inm-ctf-x-api-key-FwGorJZzdfC3QKgv4rKmw1zHCN7HSpSJOcKBjV1ceAhGbG3Sc4SbuLWpuo2l2XfPCRefjAo8q7QA2m`) call the supervisor endpoint with a `POST` and include the header.
 
@@ -257,5 +258,6 @@ Following the hints in the API errors, fuzzing the `/api/` namespace, decoding t
 **Flag:** `flag{inm_api_endpoints_design_mastery}`
 
 ---
+
 
 
