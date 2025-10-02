@@ -92,36 +92,36 @@ You will see helpful error messages such as `405 Method Not Allowed` and text li
 
 ## Fuzzing the `/api/` namespace
 
-## Fuzzing the `/api/` namespace
-
 The API hinted that sibling paths to `/api/inventory` and `/api/analytics` exist. Use a wordlist to fuzz `/api/FUZZ` and discover hidden categories. See below:
 
-> Note that the above two endpoints can be discovered by checking the responses returned when you access a non-existent path under `api/{any-path}`. See below when accessing `api/in`
+> Note that the above two endpoints can be discovered by checking the responses returned when you access a non-existent path under `api/{any-path}`. See below when accessing `api/in` for instance.
 
 <img width="1283" height="470" alt="image" src="https://github.com/user-attachments/assets/7c91c052-ffbd-48c2-bc99-d82363997981" />
 
-> Whether in a browser or an API tool, the above response is observed, which opens the door to examine the `/api/inventory` and `/api/analytics` endpoints. Note that the verbose 404 error message is returned for any path the API treats as a 404 — this expands the ways a player might end up at the inventory and analytics endpoints while fuzzing.
+> Whether in a browser or an API tool, the above response is observed, which opens the door to examine the `/api/inventory` and `/api/analytics` endpoints. Note that the verbose 404 error message is returned for any path the API treats as a 404 — this expands the various possible ways a player might end up at the inventory and analytics endpoints while fuzzing.
 >
 > For instance, going to `/api/inventory` shows that other endpoints exist below it, namely `stats` and `details` (i.e., `/api/inventory/stats` and `/api/inventory/details`).
 >
-> The `/debug` endpoint is accessible from the API root. GET is not allowed, as you may have observed in a browser; however, a POST request is accepted.
+> The `/debug` endpoint is accessible from the API root. GET is not allowed, as you may have observed in a browser; however, a POST request is accepted. However, this endpoint remains to be a decoy for this challenge.
 
 Now we know that every major submodule of the API has `details` and `stats` sub-endpoints. But let's go back to our 404 error message. One line stands out:  
 `"[SYS-DEBUG] Additional subsystem/module online: directory service"` — what is the directory? Does it exist? Trying to access it returns 404. What does "directory" mean — user directory? Maybe try `/api/user` or `/api/users` — boom, there we are. We have identified another submodule from the error messages.
 
-We should know by now to try `details` and `stats` under `/users` — and indeed they exist. Of the two, `/api/users/stats` leaks more useful information, so we are on the right path. This is the assumption if we are manually interacting with the API and building our own breadcrumbs, as opposed to immediately fuzzing the entire API (which would also eventually land you in a similar place).
+We should know by now to try `details` and `stats` under `/users` — and indeed they exist. Of the two, `/api/users/stats` leaks more useful information, so we are on the right path. This is the assumption if we are manually interacting with the API and building our own breadcrumbs, as opposed to immediately fuzzing the entire API (which would also eventually land you in a similar place. Only difference being the later gives you limited starting point to progress after indentifying the endpoin, though every other player will have their opinion of this - though I digress 😂).
 
 The `stats` endpoint leaks an admin path. Accessing it does not accept an HTTP GET; we have to use POST. Sending a POST to `/api/users/admin` further leaks important info — the response asks for a strange header named `X-LEGACY-KEY`, and the error message helpfully directs us where to look for the correct value of this header.
 
 <img width="1243" height="144" alt="image" src="https://github.com/user-attachments/assets/755976bb-18e4-4d6d-85d4-66fe7c369c37" />
 
-> The error points us to the Invisitech-Labs GitHub organization: the key was used in CI/CD onboarding/deployment workflows. Luckily, there is a repo called `onboarding-pipelin` that gives us a direct correlation.
+> The error points us to the Invisitech-Labs GitHub organization: the key was used in CI/CD onboarding/deployment workflows. Luckily, there is a repo called `onboarding-pipeline` that gives us a direct correlation.
 >
-> Opening the `onboarding-pipelin` repo reveals a GitHub workflow file with the legacy key just sitting there waiting for us to pick it up:
+> Opening the `onboarding-pipeline` repo reveals a GitHub workflow file with the legacy key just sitting there waiting for us to pick it up:
 
 <img width="1101" height="611" alt="image" src="https://github.com/user-attachments/assets/be36aebe-e50f-41e9-bd15-c4f7b6ed3401" />
 
-> Using that value as the `X-LEGACY-KEY` header and sending a POST to `/api/users/admin` works — we get a new response (the challenge designer wanted us to do a bit of dev recon; I thought we had the flag at that point!).
+> Using that value as the `X-LEGACY-KEY` header and sending a POST to `/api/users/admin` works — we get a new response
+
+> (**the challenge designer wanted us to do a bit of dev recon; I thought we had the flag at that point! Dang!**).
 
 Now the response gives us a different prompt:
 
@@ -131,13 +131,15 @@ Now the response gives us a different prompt:
 
 But sending a POST to `/api/users/supervisor` returns `401 Unauthorized`. The response tells us exactly what it needs: the `X-API-KEY` header. (Remember this challenge was tagged `http-headers`.) A good hacker might try sending `X-API-KEY` with no value or with guessed/gibberish values to see how the API responds — and here that skill pays off. The API rejects our guessed `X-API-KEY` but returns a message telling us where to find the real key.
 
-It clearly instructs us to check the pipeline notes — which sends us back to the Invisitech-Labs GitHub org. In the pipeline notes (in this repo — you had to do another recon to identify which repo to check: [revamped-pipeline]({link her}})) it was straightforward to map things: the new developer "makaveli" introduced a wave of improvements, so `revamped-pipeline` is the likely place to look rather than the older `onboarding-pipelin` repo.
+<img width="1137" height="150" alt="image" src="https://github.com/user-attachments/assets/48e6b376-5725-4a4f-9eda-74eaacd234aa" />
+
+It clearly instructs us to check the pipeline notes — which sends us back to the Invisitech-Labs GitHub org. In the pipeline notes (in this repo — you had to do another recon to identify which repo to check: [revamped-pipeline](https://github.com/InvisiTech-Labs/revamped-pipeline/blob/36be6e40a4de3e62fbc28ea82701c37b88ec5cd2/notes/notes.md) it was straightforward to map things: the new developer "makaveli" introduced a wave of improvements, so `revamped-pipeline` is the likely place to look rather than the older `onboarding-pipelin` repo.
 
 The notes inside the `revamped-pipeline` repo do not contain the key directly. Maybe copy the hex present there and pass it as our `X-API-KEY`? Let's send that hex value `[hex her]`.
 
 On the first submission the API seems not to accept it — it looks like it didn't even receive it. Resending once still yields nothing. On the third attempt we get a different error message. Woah — the challenge designer really led us on.
 
-<img width="1137" height="150" alt="image" src="https://github.com/user-attachments/assets/48e6b376-5725-4a4f-9eda-74eaacd234aa" />
+
 
 <img width="777" height="117" alt="image" src="https://github.com/user-attachments/assets/2ccd961a-4a53-48ce-82a8-5f870784bcb2" />
 
@@ -255,4 +257,5 @@ Following the hints in the API errors, fuzzing the `/api/` namespace, decoding t
 **Flag:** `flag{inm_api_endpoints_design_mastery}`
 
 ---
+
 
