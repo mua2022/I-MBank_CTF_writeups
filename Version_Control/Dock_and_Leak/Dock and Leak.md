@@ -90,6 +90,8 @@ You will see helpful error messages such as `405 Method Not Allowed` and text li
 
 ---
 
+# Expected Solution method - Manual
+
 ## Fuzzing the `/api/` namespace
 
 The API hinted that sibling paths to `/api/inventory` and `/api/analytics` exist. Use a wordlist to fuzz `/api/FUZZ` and discover hidden categories. See below:
@@ -130,6 +132,7 @@ Now the response gives us a different prompt:
 > This time the API asks us to access restricted records at `/api/users/supervisor`. Definitely this looks like the flag. Let's gooo!
 
 But sending a POST to `/api/users/supervisor` returns `401 Unauthorized`. The response tells us exactly what it needs: the `X-API-KEY` header. (Remember this challenge was tagged `http-headers`.) A good hacker might try sending `X-API-KEY` with no value or with guessed/gibberish values to see how the API responds — and here that skill pays off. The API rejects our guessed `X-API-KEY` but returns a message telling us where to find the real key.
+
 <img width="777" height="117" alt="image" src="https://github.com/user-attachments/assets/2ccd961a-4a53-48ce-82a8-5f870784bcb2" />
 
 
@@ -137,18 +140,30 @@ It clearly instructs us to check the pipeline notes — which sends us back to t
 
 The notes inside the `revamped-pipeline` repo do not contain the key directly. Maybe copy the hex present there and pass it as our `X-API-KEY`? Let's send that hex value, which is `68747470733a2f2f676973742e6769746875622e636f6d2f617363697465616d2f3231373035356266356362333837346236396663626533653139626439396635`.
 
-On the first submission the API seems not to accept it — it looks like it didn't even receive it. Resending once still yields nothing. On the third attempt we get a different error message. Woah — the challenge designer really led us on.
+On the first submission the API seems not to accept it — it looks like it didn't even receive it. Resending once still yields nothing. On the third attempt we get a different error message. Woah — the challenge designer really led us on. 
+	
+	(The first screenshot below shows the same error you get when the X-API-KEY value is wrong. The second screenshot shows a special case that only appears after submitting the hex value on the third consecutive attempt. In other words, the API is clever enough to reward patient, observant players who pay attention to error messages. This challenge demanded keen attention to error messages and response sizes — the errors progressively revealed more useful information. As you read this, ask yourself: did I consider such scenarios? If not, take it as a learning point.)
+
+
+<img width="777" height="117" alt="image" src="https://github.com/user-attachments/assets/2ccd961a-4a53-48ce-82a8-5f870784bcb2" />
 
 <img width="1137" height="150" alt="image" src="https://github.com/user-attachments/assets/48e6b376-5725-4a4f-9eda-74eaacd234aa" />
 
 Now the HTTP status code is one of a kind: `418`. What is `418` (I'm a teapot)? If this is your first time, read about it here: [HTTP Status Code 418](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/418).
+
+Here is the error message above with the HTTP status code 418:
+
+<img width="1343" height="885" alt="image" src="https://github.com/user-attachments/assets/492819bc-62e6-4bb3-833c-c3acf94b363e" />
+
 
 The error gives more details: it tells us to check the formatting of the value we passed. The hex — yes. But what is that hex? Let's pull up CyberChef to inspect the value:
 
 <img width="1137" height="150" alt="image" src="https://github.com/user-attachments/assets/b137313d-1d26-49bd-8a76-e93dae6e56f7" />
 
 > CyberChef returns (even using the Magic operation) a gist link: [https://gist.github.com/asciteam/217055bf5cb3874b69fcbe3e19bd99f5](https://gist.github.com/asciteam/217055bf5cb3874b69fcbe3e19bd99f5).
->
+
+<img width="1521" height="615" alt="image" src="https://github.com/user-attachments/assets/3833fce8-c141-4501-9262-cb5539fe7705" />
+
 > The gist is tantalizing — it contains the `X-API-KEY` we have been searching for. Take the key and feed it to the POST request for `/api/users/supervisor`.
 
 <img width="1709" height="872" alt="image" src="https://github.com/user-attachments/assets/0c13b179-33ea-4226-8257-ff84ee3457fb" />
@@ -227,15 +242,15 @@ In this challenge we found a hex blob that decodes to a URL (a GitHub Gist) poin
 
 * <https://github.com/InvisiTech-Labs/revamped-pipeline/notes/notes.md>
 
-* ![alt text](image.png)
+![alt text](image.png)
 
 #### Decode the key from HEX
 
-* ![alt text](image-1.png)
+![alt text](image-1.png)
 
 The decoded string produced a URL like `https://gist.github.com/asciteam/217055bf5cb3874b69fcbe3e19bd99f5` — inspect the gist for an X-API-KEY
 
-* ![alt text](image-2.png)
+![alt text](image-2.png)
 
 #### Using the discovered API key
 
@@ -253,11 +268,14 @@ A successful response returns `200` and a JSON body containing the flag.
 
 ## Conclusion
 
-Following the hints in the API errors, fuzzing the `/api/` namespace, decoding the developer-left hex link, and supplying the discovered `X-API-KEY` allowed us to gain supervisor access and capture the flag:
+Following the API error hints, fuzzing the `/api/` namespace, decoding the developer’s hex link, and supplying the discovered `X-API-KEY` granted us supervisor access and let us capture the flag:
 
-**Flag:** `flag{inm_api_endpoints_design_mastery}`
+Here is the flag
+
+> **Flag:** `flag{inm_api_endpoints_design_mastery}`
 
 ---
+
 
 
 
