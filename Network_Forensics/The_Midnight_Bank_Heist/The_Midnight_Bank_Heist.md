@@ -2,7 +2,11 @@
 
 ## Step 1: Initial Analysis with Wireshark
 
+<<<<<<< HEAD
 Begin by opening the provided `exfiltration_noisy.pcap` file in Wireshark.
+=======
+Begin by opening the provided exfiltration_noisy.pcap file in Wireshark.
+>>>>>>> 547a7fa (changed hint)
 
 To quickly identify streams of interest, especially those containing large data transfers, we can sort by packet length.
 
@@ -20,7 +24,11 @@ Right-click on the identified large packet (length 265) and navigate to:
 
 This will open a new window showing the entire conversation between the two hosts for that specific TCP connection.
 
+<<<<<<< HEAD
 In the `Follow TCP Stream` window, you will see a lot of raw data. 
+=======
+In the "Follow TCP Stream" window, you will see a lot of raw data.
+>>>>>>> 547a7fa (changed hint)
 
 Crucially, at the beginning of the stream, you should identify the file signature (magic bytes) for a ZIP file: PK (which in hex is 50 4B). This indicates that the transmitted data is a ZIP archive.
 
@@ -95,6 +103,10 @@ Finally, read the `flag.txt` file to get the flag!
 
 ![alt text](image-7.png)
 
+<<<<<<< HEAD
 Here is the flag:
 
 > CTF{Imbank_You_Found_The_Exfiltrated_Flag_And_Cracked_The_Hash!}
+=======
+    CTF{Imbank_You_Found_The_Exfiltrated_Flag_And_Cracked_The_Hash!}
+>>>>>>> 547a7fa (changed hint)

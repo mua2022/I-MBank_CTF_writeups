@@ -11,10 +11,21 @@ The first clue is that text is embedded in the image once you open it.This strin
 ## 2. Analyze the Extracted Text
 
 The extracted string was iodj{fdhvdu_vdodg}. My analysis was:
+<<<<<<< HEAD
 - It follows the common CTF flag format flag{...}.
 - iodj is likely the ciphertext for flag. Similarly, the words inside appear to be a single phrase separated by an underscore.
 - The challenge name, "Greek in Cyber Security," is a misdirection!
 - It actually points to Julius Caesar, a famous Roman (not Greek) general who used a cipher. The description "A taste of ancient Rome" confirms this. This is a classic Caesar Cipher.
+=======
+
+    It follows the common CTF flag format flag{...}.
+
+    iodj is likely the ciphertext for flag. Similarly, the words inside appear to be a single phrase separated by an underscore.
+
+    The challenge name, "Greek in Cyber Security," is a misdirection! 
+    
+    It actually points to Julius Caesar, a famous Roman (not Greek) general who used a cipher. This is a classic Caesar Cipher.
+>>>>>>> 547a7fa (changed hint)
 
 Why I decided on Caesar Cipher:
 - The word "Caesar" is one of the most famous names associated with ancient Rome.
